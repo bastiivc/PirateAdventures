@@ -17,8 +17,6 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
-
-
 public class Main extends ApplicationAdapter {
     private OrthographicCamera camera;
     private SpriteBatch batch;	   
