@@ -37,12 +37,12 @@ public class Main extends ApplicationAdapter {
         tarro = new Tarro(new Texture(Gdx.files.internal("pirataSpriteA1OpenG.png")), hurtSound);
 
         // Cargar la textura de las gotas
-        Texture gota = new Texture(Gdx.files.internal("drop.png"));
-        Texture gotaMala = new Texture(Gdx.files.internal("dropBad.png"));
+        Texture moneda = new Texture(Gdx.files.internal("moneda_pirata.png"));
+        Texture tiburon = new Texture(Gdx.files.internal("Shark1.png"));
 
         Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("coins4.mp3"));
         Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("pirate.mp3"));
-        lluvia = new Lluvia(gota, gotaMala, dropSound, rainMusic);
+        lluvia = new Lluvia(moneda, tiburon, dropSound, rainMusic);
 
         // Inicializar la cámara
         camera = new OrthographicCamera();
