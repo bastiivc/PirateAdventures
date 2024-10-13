@@ -43,6 +43,14 @@ public class Tarro {
     }
 
     public void dibujar(SpriteBatch batch) {
+        // Verificar que los índices no estén fuera del rango de la matriz
+        if (frameActual >= pirateRegions.length || 
+            direccion >= pirateRegions[frameActual].length) {
+            // Establecer valores por defecto si los índices no son válidos
+            frameActual = 0;
+            direccion = 0;
+        }
+
         // Seleccionar la región adecuada del sprite según el frame y la dirección
         TextureRegion region = new TextureRegion(pirateRegions[frameActual][direccion]);
 
@@ -61,6 +69,7 @@ public class Tarro {
             if (tiempoHerido <= 0) herido = false;
         }
     }
+
 
     public void actualizarMovimiento() {
         if (herido) {

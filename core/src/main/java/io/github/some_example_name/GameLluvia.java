@@ -1,6 +1,5 @@
 package io.github.some_example_name;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -10,95 +9,167 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-public class GameLluvia extends ApplicationAdapter {
+public class GameLluvia {
     private OrthographicCamera camera;
     private SpriteBatch batch;
     private Tarro tarro;
     private Lluvia lluvia;
-    
-    private Stage stage; // Para manejar la UI
-    private TextButton botonReiniciar; // Botón de reinicio
-    private boolean juegoPausado = false; // Estado de pausa
-    
-    @Override
-    public void create () {
-        new BitmapFont();
-        
-        // Cargar imágenes y sonidos
-        Sound hurtSound = Gdx.audio.newSound(Gdx.files.internal("hurt.ogg"));
-        tarro = new Tarro(new Texture(Gdx.files.internal("bucket.png")), hurtSound);
 
-        Texture gota = new Texture(Gdx.files.internal("drop.png"));
-        Texture gotaMala = new Texture(Gdx.files.internal("dropBad.png"));
-        Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("drop.wav"));
-        Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("pirate.mp3"));
-        lluvia = new Lluvia(gota, gotaMala, dropSound, rainMusic);
+    private Texture background;
+    private Texture dayBackground;
+    private Texture nightBackground;
+    private Texture buttonTexture;
 
-        // Cámara
+    private BitmapFont font; // Fuente para puntos y vidas
+
+    private Stage stage;
+    private boolean juegoPausado = false;
+    private ImageButton botonReiniciar;
+
+    public GameLluvia() {
+        // Inicializar fondos
+        dayBackground = new Texture(Gdx.files.internal("DayBackground1.jpg"));
+        nightBackground = new Texture(Gdx.files.internal("NightBackground.png"));
+        background = dayBackground;
+
+        // Inicializar cámara y batch
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         batch = new SpriteBatch();
 
-        // Crear tarro y lluvia
+        // Inicializar fuente
+        font = new BitmapFont();
+
+        // Crear Tarro y Lluvia
+        Sound hurtSound = Gdx.audio.newSound(Gdx.files.internal("01._damage_grunt_male.wav"));
+        tarro = new Tarro(new Texture(Gdx.files.internal("pirataSpriteA1OpenG.png")), hurtSound);
+
+        Texture gota = new Texture(Gdx.files.internal("moneda_pirata.png"));
+        Texture gotaMala = new Texture(Gdx.files.internal("Shark1.png"));
+        Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("Coins4.mp3"));
+        Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("pirate.mp3"));
+        lluvia = new Lluvia(gota, gotaMala, dropSound, rainMusic);
+
         tarro.crear();
         lluvia.crear();
 
-        // Inicialización del Stage
+        // Inicializar Stage
         stage = new Stage(new ScreenViewport());
-        Gdx.input.setInputProcessor(stage); // Permitir que el Stage maneje los inputs del usuario
+        Gdx.input.setInputProcessor(stage);
+
+        // Crear botón de reinicio
+        buttonTexture = new Texture(Gdx.files.internal("button.png"));
+        crearBotonReiniciar();
     }
 
-    public void reiniciarJuego() {
-        // Reiniciar variables
-        tarro.reiniciar();
-        lluvia.reiniciar();
-        juegoPausado = false;  // Reanudar el juego
+    private void crearBotonReiniciar() {
+        // Crear drawable para el botón
+        TextureRegionDrawable drawable = new TextureRegionDrawable(buttonTexture);
 
-        // Ocultar el botón
-        stage.clear();
+        // Crear ImageButton con el drawable
+        botonReiniciar = new ImageButton(drawable);
+        botonReiniciar.setSize(125, 62);
+
+        // Configurar posición inicial del botón
+        actualizarPosicionBotonReiniciar();
+
+        // Añadir listener para reiniciar el juego
+        botonReiniciar.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                reiniciarJuego();
+            }
+        });
+
+        // Añadir el botón al Stage
+        stage.addActor(botonReiniciar);
+        botonReiniciar.setVisible(false);
     }
 
-    @Override
+    // Método para actualizar la posición del botón dinámicamente
+    private void actualizarPosicionBotonReiniciar() {
+        botonReiniciar.setPosition(
+            (stage.getViewport().getWorldWidth() - botonReiniciar.getWidth()) / 2,
+            (stage.getViewport().getWorldHeight() - botonReiniciar.getHeight()) / 2
+        );
+    }
+
+    public void resize(int width, int height) {
+        // Actualizar el viewport del stage
+        stage.getViewport().update(width, height, true);
+
+        // Reposicionar el botón de reinicio
+        actualizarPosicionBotonReiniciar();
+    }
+
+    public void actualizarFondo() {
+        if (tarro.getPuntos() >= 1000) {
+            background = nightBackground;
+        } else {
+            background = dayBackground;
+        }
+    }
+
     public void render() {
-        // Limpiar la pantalla con color azul oscuro
-        ScreenUtils.clear(0, 0, 0.2f, 1);
+        if (tarro.getVidas() <= 0 && !juegoPausado) {
+            pausarJuego();
+        }
 
-        // Actualizar la cámara
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
-        // Verificar si el juego está en pausa
-        if (juegoPausado) {
-            stage.act(Gdx.graphics.getDeltaTime());
-            stage.draw();
-            return; // Detener el juego aquí mientras esté en pausa
-        }
-
-        // Si las vidas del tarro son 0, pausar el juego
-        if (tarro.getVidas() == 0 && !juegoPausado) {
-            pausarJuego();  // Pausar el juego solo una vez cuando llegue a 0 vidas
-        }
-
-        // Dibujar y actualizar el estado del juego si no está pausado
         batch.begin();
-        tarro.dibujar(batch); // Dibuja el tarro
-        lluvia.actualizarDibujoLluvia(batch); // Dibuja las gotas de lluvia
+        batch.draw(background, 0, 0, 800, 480);
+        tarro.dibujar(batch);
+        lluvia.actualizarDibujoLluvia(batch);
+        font.draw(batch, "Gotas totales: " + tarro.getPuntos(), 10, 470);
+        font.draw(batch, "Vidas: " + tarro.getVidas(), 720, 470);
         batch.end();
 
-        // Solo actualizar el movimiento si el juego no está pausado
-        if (!juegoPausado) {
-            tarro.actualizarMovimiento(); // Actualiza el movimiento del tarro
-            lluvia.actualizarMovimiento(tarro, juegoPausado); // Actualiza el movimiento de las gotas de lluvia
+        if (juegoPausado) {
+            botonReiniciar.setVisible(true);
+            stage.act(Gdx.graphics.getDeltaTime());
+            stage.draw();
         }
     }
-    
+
+    public void actualizarMovimiento() {
+        if (!juegoPausado) {
+            tarro.actualizarMovimiento();
+            lluvia.actualizarMovimiento(tarro, false);
+        }
+    }
+
     public void pausarJuego() {
-        juegoPausado = true;  // Detener el juego
+        juegoPausado = true;
+        botonReiniciar.setVisible(true);
+    }
+
+    public void reiniciarJuego() {
+        tarro.reiniciar();
+        lluvia.reiniciar();
+        background = dayBackground;
+        juegoPausado = false;
+        botonReiniciar.setVisible(false);
+    }
+
+    public void dispose() {
+        dayBackground.dispose();
+        nightBackground.dispose();
+        buttonTexture.dispose();
+        font.dispose();
+        tarro.destruir();
+        lluvia.destruir();
+        batch.dispose();
+    }
+
+    // Método para obtener el Stage
+    public Stage getStage() {
+        return stage;
     }
 }
