@@ -16,7 +16,7 @@ public class Tarro {
     private Sound sonidoHerido;
     private int vidas = 3;
     private int puntos;
-    private int velx = 400;
+    private int velx = 280;
     private boolean herido = false;
     private int tiempoHeridoMax = 50;
     private int tiempoHerido;
@@ -78,12 +78,19 @@ public class Tarro {
             return; // No actualizar movimiento si está herido
         }
 
+        // Aumentar la velocidad si los puntos son 1000 o más
+        if (puntos >= 1000) {
+            velx = 400; // Aumentar velocidad a 400
+        } else {
+            velx = 280; // Velocidad inicial
+        }
+
         boolean moving = false;
 
-        boolean up = Gdx.input.isKeyPressed(Input.Keys.UP);
-        boolean down = Gdx.input.isKeyPressed(Input.Keys.DOWN);
-        boolean left = Gdx.input.isKeyPressed(Input.Keys.LEFT);
-        boolean right = Gdx.input.isKeyPressed(Input.Keys.RIGHT);
+        boolean up = Gdx.input.isKeyPressed(Input.Keys.UP) || Gdx.input.isKeyPressed(Input.Keys.W);
+        boolean down = Gdx.input.isKeyPressed(Input.Keys.DOWN) || Gdx.input.isKeyPressed(Input.Keys.S);
+        boolean left = Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A);
+        boolean right = Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D);
 
         // Movimiento y actualización de posición
         if (left && !right) {
