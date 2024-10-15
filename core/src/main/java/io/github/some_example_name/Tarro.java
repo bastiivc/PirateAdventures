@@ -44,7 +44,7 @@ public class Tarro {
 
     public void dibujar(SpriteBatch batch) {
         // Verificar que los índices no estén fuera del rango de la matriz
-        if (frameActual >= pirateRegions.length || 
+        if (frameActual >= pirateRegions.length ||
             direccion >= pirateRegions[frameActual].length) {
             // Establecer valores por defecto si los índices no son válidos
             frameActual = 0;

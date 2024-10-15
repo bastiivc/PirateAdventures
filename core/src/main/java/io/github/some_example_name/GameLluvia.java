@@ -49,11 +49,16 @@ public class GameLluvia {
         Sound hurtSound = Gdx.audio.newSound(Gdx.files.internal("01._damage_grunt_male.wav"));
         tarro = new Tarro(new Texture(Gdx.files.internal("pirataSpriteA1OpenG.png")), hurtSound);
 
-        Texture gota = new Texture(Gdx.files.internal("moneda_pirata.png"));
-        Texture gotaMala = new Texture(Gdx.files.internal("Shark1.png"));
         Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("Coins4.mp3"));
         Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("pirate.mp3"));
-        lluvia = new Lluvia(gota, gotaMala, dropSound, rainMusic);
+        lluvia = new Lluvia(
+        	    new Texture(Gdx.files.internal("moneda_pirata.png")),
+        	    new Texture(Gdx.files.internal("Shark1.png")),
+        	    new Texture(Gdx.files.internal("moneda_pirata.png")),
+        	    dropSound,
+        	    rainMusic
+        	);
+
 
         tarro.crear();
         lluvia.crear();
