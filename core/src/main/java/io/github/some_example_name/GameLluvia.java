@@ -54,7 +54,7 @@ public class GameLluvia {
         lluvia = new Lluvia(
         	    new Texture(Gdx.files.internal("moneda_pirata.png")),
         	    new Texture(Gdx.files.internal("Shark1.png")),
-        	    new Texture(Gdx.files.internal("moneda_pirata.png")),
+        	    new Texture(Gdx.files.internal("sword.png")),
         	    dropSound,
         	    rainMusic
         	);

@@ -14,11 +14,12 @@ public class Tarro {
     private Texture bucketImage;
     private TextureRegion[][] pirateRegions; // Matriz para los sprites del pirata
     private Sound sonidoHerido;
+    
     private int vidas = 3;
     private int puntos;
     private int velx = 280;
     private boolean herido = false;
-    private int tiempoHeridoMax = 50;
+    private final int tiempoHeridoMax = 50;
     private int tiempoHerido;
     private int direccion; // 0 = Frontal (cara), 1 = Lado, 2 = Espalda
     private int frameActual = 0; // Frame actual de la animación
@@ -31,7 +32,7 @@ public class Tarro {
         // Dividir la imagen en una matriz de regiones de 32x32
         pirateRegions = TextureRegion.split(bucketImage, 32, 32);
     }
-
+    
     public void crear() {
         bucket = new Rectangle();
         bucket.x = 800 / 2 - 64 / 2;
