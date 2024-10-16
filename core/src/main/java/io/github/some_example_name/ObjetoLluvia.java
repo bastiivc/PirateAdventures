@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
-public abstract class ObjetoLluvia {
+public abstract class ObjetoLluvia implements Actualizable, Dibujable{
     protected Rectangle area;
     protected Texture textura;
 
@@ -16,8 +16,10 @@ public abstract class ObjetoLluvia {
     }
 
     // Método abstracto para actualizar el movimiento
+    @Override
     public abstract void actualizarMovimiento(float velocidad);
 
+    @Override
     // Método abstracto para dibujar el objeto en pantalla
     public abstract void dibujar(SpriteBatch batch);
 

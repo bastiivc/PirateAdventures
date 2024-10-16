@@ -8,12 +8,12 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class Lluvia {
+public class Lluvia implements Destruible {
     private Array<ObjetoLluvia> objetosLluvia;
     private long lastDropTime;
     private Sound dropSound;
     private Music rainMusic;
-    
+
     private long intervaloCreacion = 80000000; // Intervalo por defecto en nanosegundos
     private float velocidadCaida = 300; // Velocidad inicial de caída
 
@@ -42,10 +42,10 @@ public class Lluvia {
         rainMusic.setLooping(true);
         rainMusic.play();
     }
-    
+
     private void ajustarDificultad(Tarro tarro) {
         int puntos = tarro.getPuntos();
-        
+
         if (puntos >= 1200) {
             // Cambiar las probabilidades para mayor dificultad
             probabilidadMoneda = 40;  // Monedas menos frecuentes (40%)
@@ -58,7 +58,7 @@ public class Lluvia {
             // Reducir el tiempo entre apariciones de objetos
             intervaloCreacion = 40000000; // más rápido
         }
-        
+
         if (puntos >= 1000) {
             // Cambiar las probabilidades para mayor dificultad
             probabilidadMoneda = 50;  // Monedas menos frecuentes (40%)
@@ -71,7 +71,7 @@ public class Lluvia {
             // Reducir el tiempo entre apariciones de objetos
             intervaloCreacion = 50000000; // Se mantiene
         }
-        
+
         if (puntos >= 7000) {
             // Cambiar las probabilidades para mayor dificultad
             probabilidadMoneda = 60;  // Monedas menos frecuentes (40%)
@@ -127,7 +127,6 @@ public class Lluvia {
     }
 
 
-
     public void actualizarMovimiento(Tarro tarro, boolean juegoPausado) {
         if (juegoPausado) return;
 
@@ -165,6 +164,7 @@ public class Lluvia {
         }
     }
 
+    @Override
     public void destruir() {
         dropSound.dispose();
         rainMusic.dispose();
