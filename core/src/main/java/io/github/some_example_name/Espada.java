@@ -3,7 +3,7 @@ package io.github.some_example_name;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Espada extends ObjetoLluvia {
+public class Espada extends ObjetoLluvia implements Destruible {
 
     public Espada(Texture textura) {
         super(textura);
@@ -22,5 +22,10 @@ public class Espada extends ObjetoLluvia {
     @Override
     public void alColisionar(Tarro tarro) {
         tarro.sumarPuntos(20); // La espada da más puntos que una moneda
+    }
+
+    @Override
+    public void destruir() {
+        textura.dispose();
     }
 }
