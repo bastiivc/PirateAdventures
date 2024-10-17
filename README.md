@@ -29,6 +29,7 @@ Se han utilizado diversas herramientas y bibliotecas en este proyecto para facil
 ## 👥 Integrantes
     Bastián Mejías
     Patricio Hernández
+    Simón Vera
 
 ## ⚙️ Usage
 
