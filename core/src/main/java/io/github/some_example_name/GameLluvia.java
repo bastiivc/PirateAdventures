@@ -14,6 +14,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+
+/**
+ * La clase GameLluvia es el núcleo del juego, encargada de inicializar y gestionar los elementos principales
+ * como la cámara, el tarro, la lluvia, los fondos y las interacciones del juego.
+ */
+
 public class GameLluvia {
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -30,6 +36,10 @@ public class GameLluvia {
     private Stage stage;
     private boolean juegoPausado = false;
     private ImageButton botonReiniciar;
+
+    /**
+     * Constructor de la clase GameLluvia. Inicializa fondos, cámara, batch, fuente, tarro, lluvia y el botón de reinicio.
+     */
 
     public GameLluvia() {
         // Inicializar fondos
@@ -72,6 +82,10 @@ public class GameLluvia {
         crearBotonReiniciar();
     }
 
+    /**
+     * Crea el botón de reiniciar y lo añade al stage.
+     */
+
     private void crearBotonReiniciar() {
         // Crear drawable para el botón
         TextureRegionDrawable drawable = new TextureRegionDrawable(buttonTexture);
@@ -104,6 +118,13 @@ public class GameLluvia {
         );
     }
 
+    /**
+     * Ajusta el tamaño del viewport y reposiciona el botón de reinicio al cambiar el tamaño de la ventana.
+     *
+     * @param width  El nuevo ancho de la ventana.
+     * @param height El nuevo alto de la ventana.
+     */
+
     public void resize(int width, int height) {
         // Actualizar el viewport del stage
         stage.getViewport().update(width, height, true);
@@ -112,6 +133,10 @@ public class GameLluvia {
         actualizarPosicionBotonReiniciar();
     }
 
+    /**
+     * Actualiza el fondo del juego dependiendo de la puntuación del tarro.
+     */
+
     public void actualizarFondo() {
         if (tarro.getPuntos() >= 1000) {
             background = nightBackground;
@@ -119,6 +144,11 @@ public class GameLluvia {
             background = dayBackground;
         }
     }
+
+
+    /**
+     * Renderiza el juego, dibujando los elementos en pantalla y gestionando el estado de pausa.
+     */
 
     public void render() {
         if (tarro.getVidas() <= 0 && !juegoPausado) {
@@ -143,6 +173,11 @@ public class GameLluvia {
         }
     }
 
+
+    /**
+     * Actualiza el movimiento de los elementos del juego si este no está pausado.
+     */
+
     public void actualizarMovimiento() {
         if (!juegoPausado) {
             tarro.actualizarMovimiento();
@@ -150,10 +185,18 @@ public class GameLluvia {
         }
     }
 
+    /**
+     * Pausa el juego y muestra el botón de reinicio.
+     */
+
     public void pausarJuego() {
         juegoPausado = true;
         botonReiniciar.setVisible(true);
     }
+
+    /**
+     * Reinicia el juego a su estado inicial.
+     */
 
     public void reiniciarJuego() {
         tarro.reiniciar();
@@ -162,6 +205,10 @@ public class GameLluvia {
         juegoPausado = false;
         botonReiniciar.setVisible(false);
     }
+
+    /**
+     * Libera los recursos utilizados por el juego.
+     */
 
     public void dispose() {
         dayBackground.dispose();
@@ -173,7 +220,13 @@ public class GameLluvia {
         batch.dispose();
     }
 
-    // Método para obtener el Stage
+
+    /**
+     * Obtiene el Stage del juego.
+     *
+     * @return El Stage utilizado en el juego.
+     */
+
     public Stage getStage() {
         return stage;
     }

@@ -9,6 +9,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
+/**
+ * La clase Tarro representa el personaje controlado por el jugador en el juego.
+ * El tarro se mueve por la pantalla, recolecta objetos y puede perder vidas si es dañado.
+ * Además, tiene una animación basada en diferentes sprites y direcciones de movimiento.
+ */
+
 public class Tarro implements Destruible, Dibujable{
     private Rectangle bucket;
     private Texture bucketImage;
@@ -25,6 +31,13 @@ public class Tarro implements Destruible, Dibujable{
     private int frameActual = 0; // Frame actual de la animación
     private boolean flipX = false; // Indica si se debe voltear el sprite horizontalmente
 
+    /**
+     * Constructor de la clase Tarro.
+     *
+     * @param tex La textura que representa el sprite del tarro.
+     * @param ss  El sonido que se reproduce cuando el tarro es herido.
+     */
+
     public Tarro(Texture tex, Sound ss) {
         bucketImage = tex;
         sonidoHerido = ss;
@@ -32,6 +45,10 @@ public class Tarro implements Destruible, Dibujable{
         // Dividir la imagen en una matriz de regiones de 32x32
         pirateRegions = TextureRegion.split(bucketImage, 32, 32);
     }
+
+    /**
+     * Inicializa el área de colisión del tarro y lo posiciona en la parte inferior de la pantalla.
+     */
 
     public void crear() {
         bucket = new Rectangle();
@@ -42,6 +59,13 @@ public class Tarro implements Destruible, Dibujable{
         bucket.width = 20;
         bucket.height = 20;
     }
+
+    /**
+     * Dibuja el tarro en la pantalla.
+     * Si el tarro está herido, se aplica un efecto de sacudida.
+     *
+     * @param batch El SpriteBatch utilizado para dibujar el tarro.
+     */
 
     @Override
     public void dibujar(SpriteBatch batch) {
@@ -71,6 +95,12 @@ public class Tarro implements Destruible, Dibujable{
             if (tiempoHerido <= 0) herido = false;
         }
     }
+
+    /**
+     * Actualiza el movimiento del tarro en función de las teclas presionadas y ajusta su velocidad.
+     * Si el tarro está herido, no puede moverse hasta que se recupere.
+     */
+
     public void actualizarMovimiento() {
         if (herido) {
             tiempoHerido--;
@@ -133,6 +163,11 @@ public class Tarro implements Destruible, Dibujable{
         }
     }
 
+    /**
+     * Resta una vida al tarro cuando recibe daño, reproduce un sonido de herido y aplica un efecto de sacudida.
+     * Si las vidas llegan a 0, no puede perder más.
+     */
+
     public void dañar() {
         if (vidas > 0) {
             vidas--;
@@ -145,15 +180,29 @@ public class Tarro implements Destruible, Dibujable{
         }
     }
 
+    /**
+     * Libera los recursos utilizados por el tarro, como la textura.
+     */
 
     @Override
     public void destruir() {
         bucketImage.dispose();
     }
 
+    /**
+     * Verifica si el tarro está en estado herido.
+     *
+     * @return true si el tarro está herido, false de lo contrario.
+     */
+
     public boolean estaHerido() {
         return herido;
     }
+
+    /**
+     * Reinicia el estado del tarro a sus valores iniciales: 3 vidas y 0 puntos.
+     * Coloca el tarro en su posición inicial.
+     */
 
     public void reiniciar() {
         vidas = 3;
@@ -161,17 +210,41 @@ public class Tarro implements Destruible, Dibujable{
         bucket.x = 800 / 2 - 64 / 2;
     }
 
+    /**
+     * Obtiene el número de vidas restantes del tarro.
+     *
+     * @return El número de vidas actuales.
+     */
+
     public int getVidas() {
         return vidas;
     }
+
+    /**
+     * Obtiene los puntos acumulados por el tarro.
+     *
+     * @return El número de puntos actuales.
+     */
 
     public int getPuntos() {
         return puntos;
     }
 
+    /**
+     * Obtiene el área de colisión del tarro.
+     *
+     * @return Un objeto Rectangle que representa el área de colisión.
+     */
+
     public Rectangle getArea() {
         return bucket;
     }
+
+    /**
+     * Suma puntos al total acumulado por el tarro.
+     *
+     * @param pp La cantidad de puntos a sumar.
+     */
 
     public void sumarPuntos(int pp) {
         puntos += pp;
