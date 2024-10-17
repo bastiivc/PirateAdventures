@@ -8,6 +8,11 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
+/**
+ * La clase Lluvia controla la creación, movimiento y dibujo de los objetos que caen en el juego, como monedas, tiburones y espadas.
+ * Además, ajusta la dificultad del juego según los puntos del jugador y gestiona los efectos de sonido y música de fondo.
+ */
+
 public class Lluvia implements Destruible {
     private Array<ObjetoLluvia> objetosLluvia;
     private long lastDropTime;
@@ -27,6 +32,17 @@ public class Lluvia implements Destruible {
     private Texture texturaTiburon;
     private Texture texturaEspada;
 
+    /**
+     * Constructor de la clase Lluvia.
+     * Inicializa las texturas de los objetos, el sonido de los objetos que caen y la música de fondo.
+     *
+     * @param moneda  La textura para el objeto Moneda.
+     * @param tiburon La textura para el objeto Tiburón.
+     * @param espada  La textura para el objeto Espada.
+     * @param ss      El sonido que se reproduce cuando un objeto colisiona.
+     * @param mm      La música de fondo que se reproduce durante el juego.
+     */
+
     public Lluvia(Texture moneda, Texture tiburon, Texture espada, Sound ss, Music mm) {
         this.texturaMoneda = moneda;
         this.texturaTiburon = tiburon;
@@ -35,6 +51,10 @@ public class Lluvia implements Destruible {
         this.rainMusic = mm;
     }
 
+    /**
+     * Inicializa la lista de objetos que caen y comienza a reproducir la música de fondo en bucle.
+     */
+
     public void crear() {
         objetosLluvia = new Array<>();
         crearObjetoLluvia();
@@ -42,6 +62,13 @@ public class Lluvia implements Destruible {
         rainMusic.setLooping(true);
         rainMusic.play();
     }
+
+    /**
+     * Ajusta la dificultad del juego en función de los puntos acumulados por el jugador.
+     * Modifica las probabilidades de aparición de los objetos, la velocidad de caída y el intervalo de creación de objetos.
+     *
+     * @param tarro El tarro del jugador, usado para acceder a sus puntos y ajustar la dificultad.
+     */
 
     private void ajustarDificultad(Tarro tarro) {
         int puntos = tarro.getPuntos();
@@ -102,6 +129,11 @@ public class Lluvia implements Destruible {
     }
 
 
+    /**
+     * Crea un nuevo objeto que cae en función de las probabilidades dinámicas de aparición.
+     * El objeto puede ser una Moneda, un Tiburón o una Espada.
+     */
+
     private void crearObjetoLluvia() {
         ObjetoLluvia objeto;
 
@@ -125,6 +157,14 @@ public class Lluvia implements Destruible {
         lastDropTime = TimeUtils.nanoTime();
     }
 
+
+    /**
+     * Actualiza el movimiento de los objetos que caen, ajustando la dificultad si es necesario,
+     * detectando colisiones con el tarro y eliminando objetos fuera de la pantalla.
+     *
+     * @param tarro        El tarro del jugador para verificar colisiones.
+     * @param juegoPausado Indica si el juego está pausado para detener la actualización de los objetos.
+     */
 
     public void actualizarMovimiento(Tarro tarro, boolean juegoPausado) {
         if (juegoPausado) return;
@@ -157,11 +197,22 @@ public class Lluvia implements Destruible {
     }
 
 
+    /**
+     * Dibuja los objetos que están cayendo en el juego.
+     *
+     * @param batch El SpriteBatch utilizado para dibujar los objetos.
+     */
+
     public void actualizarDibujoLluvia(SpriteBatch batch) {
         for (ObjetoLluvia objeto : objetosLluvia) {
             objeto.dibujar(batch);
         }
     }
+
+
+    /**
+     * Libera los recursos utilizados por la clase, como los sonidos y la música.
+     */
 
     @Override
     public void destruir() {
@@ -169,6 +220,9 @@ public class Lluvia implements Destruible {
         rainMusic.dispose();
     }
 
+    /**
+     * Reinicia el estado de la lluvia, eliminando todos los objetos y comenzando de nuevo.
+     */
     public void reiniciar() {
         objetosLluvia.clear();
         crearObjetoLluvia();
