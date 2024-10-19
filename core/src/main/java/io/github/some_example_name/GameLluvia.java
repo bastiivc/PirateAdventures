@@ -23,7 +23,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 public class GameLluvia {
     private OrthographicCamera camera;
     private SpriteBatch batch;
-    private Tarro tarro;
+    private Pirate pirate;
     private Lluvia lluvia;
 
     private Texture background;
@@ -57,7 +57,7 @@ public class GameLluvia {
 
         // Crear Tarro y Lluvia
         Sound hurtSound = Gdx.audio.newSound(Gdx.files.internal("01._damage_grunt_male.wav"));
-        tarro = new Tarro(new Texture(Gdx.files.internal("pirataSpriteA1OpenG.png")), hurtSound);
+        pirate = new Pirate(new Texture(Gdx.files.internal("pirataSpriteA1OpenG.png")), hurtSound);
 
         Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("Coins4.mp3"));
         Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("pirate.mp3"));
@@ -70,7 +70,7 @@ public class GameLluvia {
         	);
 
 
-        tarro.crear();
+        pirate.crear();
         lluvia.crear();
 
         // Inicializar Stage
@@ -135,7 +135,7 @@ public class GameLluvia {
      */
 
     public void actualizarFondo() {
-        if (tarro.getPuntos() >= 1000) {
+        if (pirate.getPuntos() >= 1000) {
             background = nightBackground;
         } else {
             background = dayBackground;
@@ -148,7 +148,7 @@ public class GameLluvia {
      */
 
     public void render() {
-        if (tarro.getVidas() <= 0 && !juegoPausado) {
+        if (pirate.getVidas() <= 0 && !juegoPausado) {
             pausarJuego();
         }
 
@@ -157,10 +157,10 @@ public class GameLluvia {
 
         batch.begin();
         batch.draw(background, 0, 0, 800, 480);
-        tarro.dibujar(batch);
+        pirate.dibujar(batch);
         lluvia.actualizarDibujoLluvia(batch);
-        font.draw(batch, "Gotas totales: " + tarro.getPuntos(), 10, 470);
-        font.draw(batch, "Vidas: " + tarro.getVidas(), 720, 470);
+        font.draw(batch, "Gotas totales: " + pirate.getPuntos(), 10, 470);
+        font.draw(batch, "Vidas: " + pirate.getVidas(), 720, 470);
         batch.end();
 
         if (juegoPausado) {
@@ -177,8 +177,8 @@ public class GameLluvia {
 
     public void actualizarMovimiento() {
         if (!juegoPausado) {
-            tarro.actualizarMovimiento();
-            lluvia.actualizarMovimiento(tarro, false);
+            pirate.actualizarMovimiento();
+            lluvia.actualizarMovimiento(pirate, false);
         }
     }
 
@@ -196,7 +196,7 @@ public class GameLluvia {
      */
 
     public void reiniciarJuego() {
-        tarro.reiniciar();
+        pirate.reiniciar();
         lluvia.reiniciar();
         background = dayBackground;
         juegoPausado = false;
@@ -212,7 +212,7 @@ public class GameLluvia {
         nightBackground.dispose();
         buttonTexture.dispose();
         font.dispose();
-        tarro.destruir();
+        pirate.destruir();
         lluvia.destruir();
         batch.dispose();
     }

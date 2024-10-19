@@ -47,12 +47,12 @@ public class Espada extends ObjetoLluvia implements Destruible {
     /**
      * Acción a realizar cuando la espada colisiona con un tarro.
      *
-     * @param tarro El tarro con el que la espada ha colisionado.
+     * @param pirate El tarro con el que la espada ha colisionado.
      */
 
     @Override
-    public void alColisionar(Tarro tarro) {
-        tarro.sumarPuntos(20); // La espada da más puntos que una moneda
+    public void alColisionar(Pirate pirate) {
+        pirate.sumarPuntos(20); // La espada da más puntos que una moneda
     }
 
     /**

@@ -71,10 +71,10 @@ public abstract class ObjetoLluvia implements Actualizable, Dibujable {
     /**
      * Método abstracto que define la acción a realizar cuando el objeto colisiona con el tarro.
      *
-     * @param tarro El tarro con el que el objeto ha colisionado.
+     * @param pirate El tarro con el que el objeto ha colisionado.
      */
 
-    public abstract void alColisionar(Tarro tarro);
+    public abstract void alColisionar(Pirate pirate);
 
     /**
      * Obtiene el área de colisión del objeto de lluvia.

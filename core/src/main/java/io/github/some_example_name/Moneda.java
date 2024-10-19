@@ -48,11 +48,11 @@ public class Moneda extends ObjetoLluvia {
      * Realiza la acción correspondiente cuando la moneda colisiona con el tarro del jugador.
      * En este caso, se suman 10 puntos al jugador.
      *
-     * @param tarro El tarro con el que la moneda ha colisionado.
+     * @param pirate El tarro con el que la moneda ha colisionado.
      */
 
     @Override
-    public void alColisionar(Tarro tarro) {
-        tarro.sumarPuntos(10);
+    public void alColisionar(Pirate pirate) {
+        pirate.sumarPuntos(10);
     }
 }

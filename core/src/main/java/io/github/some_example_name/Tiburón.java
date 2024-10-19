@@ -48,11 +48,11 @@ public class Tiburón extends ObjetoLluvia {
      * Realiza la acción correspondiente cuando el tiburón colisiona con el tarro.
      * En este caso, el tarro recibe daño y pierde una vida.
      *
-     * @param tarro El tarro con el que el tiburón ha colisionado.
+     * @param pirate El tarro con el que el tiburón ha colisionado.
      */
 
     @Override
-    public void alColisionar(Tarro tarro) {
-        tarro.dañar();
+    public void alColisionar(Pirate pirate) {
+        pirate.dañar();
     }
 }

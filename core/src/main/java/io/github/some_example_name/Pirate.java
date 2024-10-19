@@ -15,7 +15,7 @@ import com.badlogic.gdx.Input;
  * Además, tiene una animación basada en diferentes sprites y direcciones de movimiento.
  */
 
-public class Tarro implements Destruible, Dibujable{
+public class Pirate implements Destruible, Dibujable{
     private Rectangle bucket;
     private Texture bucketImage;
     private TextureRegion[][] pirateRegions; // Matriz para los sprites del pirata
@@ -38,7 +38,7 @@ public class Tarro implements Destruible, Dibujable{
      * @param ss  El sonido que se reproduce cuando el tarro es herido.
      */
 
-    public Tarro(Texture tex, Sound ss) {
+    public Pirate(Texture tex, Sound ss) {
         bucketImage = tex;
         sonidoHerido = ss;
 

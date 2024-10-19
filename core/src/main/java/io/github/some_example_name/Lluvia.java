@@ -67,11 +67,11 @@ public class Lluvia implements Destruible {
      * Ajusta la dificultad del juego en función de los puntos acumulados por el jugador.
      * Modifica las probabilidades de aparición de los objetos, la velocidad de caída y el intervalo de creación de objetos.
      *
-     * @param tarro El tarro del jugador, usado para acceder a sus puntos y ajustar la dificultad.
+     * @param pirate El tarro del jugador, usado para acceder a sus puntos y ajustar la dificultad.
      */
 
-    private void ajustarDificultad(Tarro tarro) {
-        int puntos = tarro.getPuntos();
+    private void ajustarDificultad(Pirate pirate) {
+        int puntos = pirate.getPuntos();
 
         if (puntos >= 1200) {
             // Cambiar las probabilidades para mayor dificultad
@@ -162,15 +162,15 @@ public class Lluvia implements Destruible {
      * Actualiza el movimiento de los objetos que caen, ajustando la dificultad si es necesario,
      * detectando colisiones con el tarro y eliminando objetos fuera de la pantalla.
      *
-     * @param tarro        El tarro del jugador para verificar colisiones.
+     * @param pirate        El tarro del jugador para verificar colisiones.
      * @param juegoPausado Indica si el juego está pausado para detener la actualización de los objetos.
      */
 
-    public void actualizarMovimiento(Tarro tarro, boolean juegoPausado) {
+    public void actualizarMovimiento(Pirate pirate, boolean juegoPausado) {
         if (juegoPausado) return;
 
         // Ajustar la dificultad en función de los puntos del tarro
-        ajustarDificultad(tarro);
+        ajustarDificultad(pirate);
 
         // Crear un nuevo objeto si ha pasado el intervalo definido
         if (TimeUtils.nanoTime() - lastDropTime > intervaloCreacion) {
@@ -183,8 +183,8 @@ public class Lluvia implements Destruible {
             objeto.actualizarMovimiento(velocidadCaida); // Usar velocidad ajustada
 
             // Verificar colisión con el tarro
-            if (objeto.getArea().overlaps(tarro.getArea())) {
-                objeto.alColisionar(tarro);
+            if (objeto.getArea().overlaps(pirate.getArea())) {
+                objeto.alColisionar(pirate);
                 objetosLluvia.removeIndex(i);
                 dropSound.play();
             }
