@@ -33,4 +33,4 @@ Se han utilizado diversas herramientas y bibliotecas en este proyecto para facil
 
 ## ⚙️ Usage
 
-Este proyecto está licenciado bajo la Licencia MIT, lo que te permite usar, modificar y distribuir el software libremente. Para más detalles, consulta [aquí]([https://opensource.org/license/mit](https://opensource.org/about)).
+Este proyecto está licenciado bajo la Licencia MIT, lo que te permite usar, modificar y distribuir el software libremente. Para más detalles, consulta [aquí](https://opensource.org/about).
