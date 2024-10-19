@@ -49,8 +49,7 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void resize(int width, int height) {
-        // Delegar resize al Stage del juego
-        gameLluvia.getStage().getViewport().update(width, height, true);
+        gameLluvia.resize(width, height);
     }
 
     /**

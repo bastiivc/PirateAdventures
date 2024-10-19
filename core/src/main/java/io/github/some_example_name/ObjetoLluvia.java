@@ -10,9 +10,10 @@ import com.badlogic.gdx.math.Rectangle;
  * y define métodos abstractos para actualizar el movimiento, dibujar el objeto y manejar colisiones con el tarro.
  */
 
-public abstract class ObjetoLluvia implements Actualizable, Dibujable{
-    protected Rectangle area;
-    protected Texture textura;
+public abstract class ObjetoLluvia implements Actualizable, Dibujable {
+
+    private Rectangle area;
+    private Texture textura;
 
     /**
      * Constructor de la clase ObjetoLluvia.
@@ -26,6 +27,27 @@ public abstract class ObjetoLluvia implements Actualizable, Dibujable{
         area = new Rectangle();
         area.width = 64;
         area.height = 64;
+    }
+
+    protected void mover(float dx, float dy) {
+        area.x += dx;
+        area.y += dy;
+    }
+
+    protected float getY() {
+        return area.y;
+    }
+
+    protected float getX() {
+        return area.x;
+    }
+
+    protected void setPosition(float x, float y) {
+        area.setPosition(x, y);
+    }
+
+    protected Texture getTextura() {
+        return textura;
     }
 
     /**

@@ -1,5 +1,6 @@
 package io.github.some_example_name;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -27,7 +28,9 @@ public class Moneda extends ObjetoLluvia {
 
     @Override
     public void actualizarMovimiento(float velocidad) {
-        area.y -= velocidad * com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        float deltaY = velocidad * Gdx.graphics.getDeltaTime();
+        float nuevaY = getY() - deltaY;
+        setPosition(getX(), nuevaY);
     }
 
     /**
@@ -38,7 +41,7 @@ public class Moneda extends ObjetoLluvia {
 
     @Override
     public void dibujar(SpriteBatch batch) {
-        batch.draw(textura, area.x, area.y);
+        batch.draw(getTextura(), getX(), getY());
     }
 
     /**
