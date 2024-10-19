@@ -126,10 +126,7 @@ public class GameLluvia {
      */
 
     public void resize(int width, int height) {
-        // Actualizar el viewport del stage
         stage.getViewport().update(width, height, true);
-
-        // Reposicionar el botón de reinicio
         actualizarPosicionBotonReiniciar();
     }
 
