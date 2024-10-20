@@ -10,8 +10,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 
 /**
- * La clase Tarro representa el personaje controlado por el jugador en el juego.
- * El tarro se mueve por la pantalla, recolecta objetos y puede perder vidas si es dañado.
+ * La clase Pirate representa el personaje controlado por el jugador en el juego.
+ * El pirata se mueve por la pantalla, recolecta objetos y puede perder vidas si es dañado.
  * Además, tiene una animación basada en diferentes sprites y direcciones de movimiento.
  */
 
@@ -30,12 +30,13 @@ public class Pirate implements Destruible, Dibujable{
     private int direccion; // 0 = Frontal (cara), 1 = Lado, 2 = Espalda
     private int frameActual = 0; // Frame actual de la animación
     private boolean flipX = false; // Indica si se debe voltear el sprite horizontalmente
+    private static final float MARGEN_SUPERIOR = 125f; // valor para definir un margen superior posteriormente
 
     /**
-     * Constructor de la clase Tarro.
+     * Constructor de la clase Pirate.
      *
-     * @param tex La textura que representa el sprite del tarro.
-     * @param ss  El sonido que se reproduce cuando el tarro es herido.
+     * @param tex La textura que representa el sprite del pirata.
+     * @param ss  El sonido que se reproduce cuando el pirata es herido.
      */
 
     public Pirate(Texture tex, Sound ss) {
@@ -47,24 +48,23 @@ public class Pirate implements Destruible, Dibujable{
     }
 
     /**
-     * Inicializa el área de colisión del tarro y lo posiciona en la parte inferior de la pantalla.
+     * Inicializa el área de colisión del pirata y lo posiciona en la parte inferior de la pantalla.
      */
 
     public void crear() {
         bucket = new Rectangle();
-        bucket.x = 800 / 2 - 64 / 2;
-        bucket.y = 20;
+        bucket.width = 64; // Tamaño del sprite
+        bucket.height = 64;
 
-        // Ajustar tamaño del área del personaje (más grande si es necesario)
-        bucket.width = 20;
-        bucket.height = 20;
+        bucket.x = (MyGame.WORLD_WIDTH - bucket.width) / 2;
+        bucket.y = 20; // Posición inicial en Y
     }
 
     /**
-     * Dibuja el tarro en la pantalla.
-     * Si el tarro está herido, se aplica un efecto de sacudida.
+     * Dibuja el pirata en la pantalla.
+     * Si el pirata está herido, se aplica un efecto de sacudida.
      *
-     * @param batch El SpriteBatch utilizado para dibujar el tarro.
+     * @param batch El SpriteBatch utilizado para dibujar el pirata.
      */
 
     @Override
@@ -81,24 +81,24 @@ public class Pirate implements Destruible, Dibujable{
         TextureRegion region = new TextureRegion(pirateRegions[frameActual][direccion]);
 
         // Aplicar flip horizontal si es necesario
-        if (flipX) {
+        if (flipX != region.isFlipX()) {
             region.flip(true, false);
         }
 
         if (!herido) {
-            // Dibujar con escala (64x64)
-            batch.draw(region, bucket.x, bucket.y, 64, 64);
+            // Dibujar con el tamaño del bucket (asegurar consistencia)
+            batch.draw(region, bucket.x, bucket.y, bucket.width, bucket.height);
         } else {
             // Efecto de sacudida cuando está herido
-            batch.draw(region, bucket.x, bucket.y + MathUtils.random(-5, 5), 64, 64);
+            batch.draw(region, bucket.x, bucket.y + MathUtils.random(-5, 5), bucket.width, bucket.height);
             tiempoHerido--;
             if (tiempoHerido <= 0) herido = false;
         }
     }
 
     /**
-     * Actualiza el movimiento del tarro en función de las teclas presionadas y ajusta su velocidad.
-     * Si el tarro está herido, no puede moverse hasta que se recupere.
+     * Actualiza el movimiento del pirata en función de las teclas presionadas y ajusta su velocidad.
+     * Si el pirata está herido, no puede moverse hasta que se recupere.
      */
 
     public void actualizarMovimiento() {
@@ -122,49 +122,49 @@ public class Pirate implements Destruible, Dibujable{
         boolean left = Gdx.input.isKeyPressed(Input.Keys.LEFT) || Gdx.input.isKeyPressed(Input.Keys.A);
         boolean right = Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D);
 
+        float deltaTime = Gdx.graphics.getDeltaTime();
+
         // Movimiento y actualización de posición
         if (left && !right) {
-            bucket.x -= velx * Gdx.graphics.getDeltaTime();
+            bucket.x -= velx * deltaTime;
             moving = true;
-            flipX = true; // Voltear sprite horizontalmente al moverse a la izquierda
+            flipX = true;
         } else if (right && !left) {
-            bucket.x += velx * Gdx.graphics.getDeltaTime();
+            bucket.x += velx * deltaTime;
             moving = true;
-            flipX = false; // No voltear el sprite al moverse a la derecha
+            flipX = false;
         }
 
         if (up && !down) {
-            bucket.y += velx * Gdx.graphics.getDeltaTime();
+            bucket.y += velx * deltaTime;
             moving = true;
         } else if (down && !up) {
-            bucket.y -= velx * Gdx.graphics.getDeltaTime();
+            bucket.y -= velx * deltaTime;
             moving = true;
         }
 
-        // Asegurar que el personaje no se salga de los límites de la pantalla
-        bucket.x = MathUtils.clamp(bucket.x, 0, 800 - bucket.width);
-        bucket.y = MathUtils.clamp(bucket.y, 0, 600 - bucket.height);
+        // Asegurar que el personaje no se salga de los límites del mundo virtual
+        bucket.x = MathUtils.clamp(bucket.x, 0, MyGame.WORLD_WIDTH - bucket.width);
+        bucket.y = MathUtils.clamp(bucket.y, 0, MyGame.WORLD_HEIGHT - bucket.height - MARGEN_SUPERIOR);
 
-        // Determinar dirección
+        // Determinar dirección y actualizar animación
         if (moving) {
             if (left || right) {
                 direccion = 1; // Lado
             } else if (down) {
-                direccion = 0; // Frontal (cara)
+                direccion = 0; // Frontal
             } else if (up) {
                 direccion = 2; // Espalda
             }
-            // Actualizar el frame para la animación
-            frameActual = (frameActual + 1) % 4; // 4 frames de animación
+            frameActual = (frameActual + 1) % 4;
         } else {
-            // Si el personaje no se está moviendo
             direccion = 2; // Espalda al estar parado
-            frameActual = 0; // Frame de reposo
+            frameActual = 0;
         }
     }
 
     /**
-     * Resta una vida al tarro cuando recibe daño, reproduce un sonido de herido y aplica un efecto de sacudida.
+     * Resta una vida al pirata cuando recibe daño, reproduce un sonido de herido y aplica un efecto de sacudida.
      * Si las vidas llegan a 0, no puede perder más.
      */
 
@@ -181,7 +181,7 @@ public class Pirate implements Destruible, Dibujable{
     }
 
     /**
-     * Libera los recursos utilizados por el tarro, como la textura.
+     * Libera los recursos utilizados por el pirata, como la textura.
      */
 
     @Override
@@ -190,9 +190,9 @@ public class Pirate implements Destruible, Dibujable{
     }
 
     /**
-     * Verifica si el tarro está en estado herido.
+     * Verifica si el pirata está en estado herido.
      *
-     * @return true si el tarro está herido, false de lo contrario.
+     * @return true si el pirata está herido, false de lo contrario.
      */
 
     public boolean estaHerido() {
@@ -200,18 +200,19 @@ public class Pirate implements Destruible, Dibujable{
     }
 
     /**
-     * Reinicia el estado del tarro a sus valores iniciales: 3 vidas y 0 puntos.
-     * Coloca el tarro en su posición inicial.
+     * Reinicia el estado del pirata a sus valores iniciales: 3 vidas y 0 puntos.
+     * Coloca el pirata en su posición inicial.
      */
 
     public void reiniciar() {
         vidas = 3;
         puntos = 0;
-        bucket.x = 800 / 2 - 64 / 2;
+        bucket.x = (MyGame.WORLD_WIDTH - bucket.width) / 2;
+        bucket.y = 20;
     }
 
     /**
-     * Obtiene el número de vidas restantes del tarro.
+     * Obtiene el número de vidas restantes del pirata.
      *
      * @return El número de vidas actuales.
      */
@@ -221,7 +222,7 @@ public class Pirate implements Destruible, Dibujable{
     }
 
     /**
-     * Obtiene los puntos acumulados por el tarro.
+     * Obtiene los puntos acumulados por el pirata.
      *
      * @return El número de puntos actuales.
      */
@@ -231,7 +232,7 @@ public class Pirate implements Destruible, Dibujable{
     }
 
     /**
-     * Obtiene el área de colisión del tarro.
+     * Obtiene el área de colisión del pirata.
      *
      * @return Un objeto Rectangle que representa el área de colisión.
      */
@@ -241,7 +242,7 @@ public class Pirate implements Destruible, Dibujable{
     }
 
     /**
-     * Suma puntos al total acumulado por el tarro.
+     * Suma puntos al total acumulado por el pirata.
      *
      * @param pp La cantidad de puntos a sumar.
      */

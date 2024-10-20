@@ -13,14 +13,14 @@ public class Lwjgl3Launcher {
 
     private static void createApplication() {
         Lwjgl3ApplicationConfiguration config = new Lwjgl3ApplicationConfiguration();
-        
+
         // Configurar el título de la ventana y el icono
         config.setTitle("Pirate Adventures");
         config.setWindowIcon("pirate-captain.png"); // Icono para la ventana y barra de tareas
-        
+
         config.setWindowedMode(800, 480); // Tamaño de la ventana al inicio
         config.setResizable(true); // Permitir redimensionar la ventana
-        
+
         new Lwjgl3Application(new Main(), config);
     }
 }
