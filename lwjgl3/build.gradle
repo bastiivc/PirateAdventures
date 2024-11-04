@@ -47,6 +47,11 @@ run {
   if (os.contains('mac')) jvmArgs += "-XstartOnFirstThread"
 }
 
+def appName = 'PirateAdventures'
+def projectVersion = '1.0'
+
+version = projectVersion
+
 jar {
 // sets the name of the .jar file this produces to the name of the game or app, with the version after.
   archiveFileName.set("${appName}-${projectVersion}.jar")
@@ -61,7 +66,7 @@ jar {
   }
 // setting the manifest makes the JAR runnable.
   manifest {
-    attributes 'Main-Class': project.mainClassName
+    attributes 'Main-Class': mainClassName
   }
 // this last step may help on some OSes that need extra instruction to make runnable JARs.
   doLast {
