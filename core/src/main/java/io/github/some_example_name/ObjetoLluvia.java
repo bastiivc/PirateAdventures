@@ -15,13 +15,6 @@ public abstract class ObjetoLluvia implements Actualizable, Dibujable {
     private Rectangle area;
     private Texture textura;
 
-    /**
-     * Constructor de la clase ObjetoLluvia.
-     * Inicializa la textura y define el área del objeto con dimensiones predeterminadas.
-     *
-     * @param textura La textura del objeto de lluvia.
-     */
-
     public ObjetoLluvia(Texture textura) {
         this.textura = textura;
         area = new Rectangle();
@@ -29,9 +22,8 @@ public abstract class ObjetoLluvia implements Actualizable, Dibujable {
         area.height = 64;
     }
 
-    protected void mover(float dx, float dy) {
-        area.x += dx;
-        area.y += dy;
+    public Rectangle getArea() {
+        return area;
     }
 
     protected float getY() {
@@ -51,38 +43,36 @@ public abstract class ObjetoLluvia implements Actualizable, Dibujable {
     }
 
     /**
-     * Método abstracto que debe ser implementado por las subclases para actualizar el movimiento del objeto.
+     * Método Template que define los pasos para actualizar un objeto.
+     * Este método utiliza la lógica común, delegando los pasos específicos a las subclases.
      *
-     * @param velocidad La velocidad a la que se debe mover el objeto.
+     * @param velocidad la velocidad a la que el objeto debe moverse.
+     * @param pirate    el objeto Pirate para verificar colisiones.
      */
+    public final void actualizar(float velocidad, Pirate pirate) {
+        actualizarMovimiento(velocidad);
+        if (colisionaCon(pirate)) {
+            alColisionar(pirate);
+        }
+    }
+
+    /**
+     * Verifica si el objeto colisiona con el Pirate.
+     *
+     * @param pirate el objeto Pirate a verificar.
+     * @return true si hay colisión, false de lo contrario.
+     */
+    private boolean colisionaCon(Pirate pirate) {
+        return area.overlaps(pirate.getArea());
+    }
 
     @Override
     public abstract void actualizarMovimiento(float velocidad);
 
-    /**
-     * Método abstracto que debe ser implementado por las subclases para dibujar el objeto en pantalla.
-     *
-     * @param batch El SpriteBatch utilizado para dibujar el objeto.
-     */
-
-    @Override
-    public abstract void dibujar(SpriteBatch batch);
-
-    /**
-     * Método abstracto que define la acción a realizar cuando el objeto colisiona con el tarro.
-     *
-     * @param pirate El tarro con el que el objeto ha colisionado.
-     */
-
     public abstract void alColisionar(Pirate pirate);
 
-    /**
-     * Obtiene el área de colisión del objeto de lluvia.
-     *
-     * @return Un objeto Rectangle que representa el área de colisión del objeto.
-     */
-
-    public Rectangle getArea() {
-        return area;
+    @Override
+    public void dibujar(SpriteBatch batch) {
+        batch.draw(textura, getX(), getY());
     }
 }

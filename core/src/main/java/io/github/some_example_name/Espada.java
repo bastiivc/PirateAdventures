@@ -8,58 +8,20 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * La clase Espada representa un objeto en forma de espada que cae y puede interactuar con otros objetos en el juego.
  */
 
-public class Espada extends ObjetoLluvia implements Destruible {
-
-    /**
-     * Constructor de la clase Espada.
-     *
-     * @param textura La textura de la espada.
-     */
+public class Espada extends ObjetoLluvia {
 
     public Espada(Texture textura) {
         super(textura);
     }
 
-    /**
-     * Actualiza el movimiento de la espada en función de la velocidad.
-     *
-     * @param velocidad La velocidad a la que la espada se mueve.
-     */
-
     @Override
     public void actualizarMovimiento(float velocidad) {
-        float deltaY = velocidad * Gdx.graphics.getDeltaTime();
-        float nuevaY = getY() - deltaY;
-        setPosition(getX(), nuevaY);
+        float deltaY = velocidad * com.badlogic.gdx.Gdx.graphics.getDeltaTime();
+        setPosition(getX(), getY() - deltaY);
     }
-
-    /**
-     * Dibuja la espada en la pantalla.
-     *
-     * @param batch El SpriteBatch utilizado para dibujar la espada.
-     */
-
-    @Override
-    public void dibujar(SpriteBatch batch) {
-        batch.draw(getTextura(), getX(), getY());
-    }
-
-    /**
-     * Acción a realizar cuando la espada colisiona con un tarro.
-     *
-     * @param pirate El tarro con el que la espada ha colisionado.
-     */
 
     @Override
     public void alColisionar(Pirate pirate) {
-        GameManager.getInstance().addScore(20); // Agregar puntos al GameManager
-    }
-    /**
-     * Libera los recursos utilizados por la espada.
-     */
-
-    @Override
-    public void destruir() {
-        getTextura().dispose();
+        GameManager.getInstance().addScore(20);
     }
 }
