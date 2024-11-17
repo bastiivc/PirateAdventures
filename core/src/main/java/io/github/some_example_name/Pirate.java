@@ -108,12 +108,8 @@ public class Pirate implements Destruible, Dibujable{
             return; // No actualizar movimiento si está herido
         }
 
-        // Aumentar la velocidad si los puntos son 1000 o más
-        if (puntos >= 1000) {
-            velx = 400; // Aumentar velocidad a 400
-        } else {
-            velx = 280; // Velocidad inicial
-        }
+        // Obtener velocidad del jugador desde GameManager
+        velx = (int) GameManager.getInstance().getPlayerSpeed();
 
         boolean moving = false;
 
@@ -248,6 +244,11 @@ public class Pirate implements Destruible, Dibujable{
      */
 
     public void sumarPuntos(int pp) {
-        puntos += pp;
+        GameManager.getInstance().addScore(pp);
+    }
+
+    public void addLives(int lives) {
+        vidas += lives;
+        System.out.println("¡Has ganado " + lives + " vida(s)! Vidas actuales: " + vidas);
     }
 }

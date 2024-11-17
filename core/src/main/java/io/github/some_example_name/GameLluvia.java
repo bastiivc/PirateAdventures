@@ -80,6 +80,9 @@ public class GameLluvia {
         // Crear botón de reinicio
         buttonTexture = new Texture(Gdx.files.internal("button.png"));
         crearBotonReiniciar();
+
+        // Establecer el pirata en el GameManager
+        GameManager.getInstance().setPirate(pirate);
     }
 
     /**
@@ -135,7 +138,8 @@ public class GameLluvia {
      */
 
     public void actualizarFondo() {
-        if (pirate.getPuntos() >= 1000) {
+        GameManager gameManager = GameManager.getInstance();
+        if (gameManager.isNight()) {
             background = nightBackground;
         } else {
             background = dayBackground;
@@ -159,7 +163,7 @@ public class GameLluvia {
         batch.draw(background, 0, 0, 800, 480);
         pirate.dibujar(batch);
         lluvia.actualizarDibujoLluvia(batch);
-        font.draw(batch, "Gotas totales: " + pirate.getPuntos(), 10, 470);
+        font.draw(batch, "Puntuación: " + GameManager.getInstance().getScore(), 10, 470);
         font.draw(batch, "Vidas: " + pirate.getVidas(), 720, 470);
         batch.end();
 
@@ -196,10 +200,20 @@ public class GameLluvia {
      */
 
     public void reiniciarJuego() {
+        // Reinicia los estados del pirata y la lluvia
         pirate.reiniciar();
         lluvia.reiniciar();
+
+        // Reinicia el fondo al estado inicial (día)
         background = dayBackground;
+
+        // Reinicia la puntuación y otros estados globales del juego
+        GameManager.getInstance().addScore(-GameManager.getInstance().getScore()); // Reinicia puntuación a 0
+
+        // Reinicia el estado de pausa
         juegoPausado = false;
+
+        // Oculta el botón de reinicio
         botonReiniciar.setVisible(false);
     }
 
