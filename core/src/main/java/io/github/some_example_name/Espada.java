@@ -52,9 +52,8 @@ public class Espada extends ObjetoLluvia implements Destruible {
 
     @Override
     public void alColisionar(Pirate pirate) {
-        pirate.sumarPuntos(20); // La espada da más puntos que una moneda
+        GameManager.getInstance().addScore(20); // Agregar puntos al GameManager
     }
-
     /**
      * Libera los recursos utilizados por la espada.
      */

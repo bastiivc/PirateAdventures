@@ -71,63 +71,13 @@ public class Lluvia implements Destruible {
      */
 
     private void ajustarDificultad(Pirate pirate) {
-        int puntos = pirate.getPuntos();
+        GameManager gameManager = GameManager.getInstance();
 
-        if (puntos >= 1200) {
-            // Cambiar las probabilidades para mayor dificultad
-            probabilidadMoneda = 30;  // Monedas menos frecuentes (40%)
-            probabilidadTiburon = 60; // Tiburones más frecuentes (40%)
-            probabilidadEspada = 10;  // Espadas permanecen igual (20%)
+        // Usar velocidad desde el GameManager
+        velocidadCaida = gameManager.getFallSpeed();
 
-            // Aumentar la velocidad de caída
-            velocidadCaida = 700;
-
-            // Reducir el tiempo entre apariciones de objetos
-            intervaloCreacion = 40000000; // más rápido
-
-        } else if (puntos >= 1000) {
-            //Cambiar las probabilidades para mayor dificultad
-            probabilidadMoneda = 40;  // Monedas menos frecuentes (40%)
-            probabilidadTiburon = 50; // Tiburones más frecuentes (40%)
-            probabilidadEspada = 10;  // Espadas permanecen igual (20%)
-
-            // Aumentar la velocidad de caída
-            velocidadCaida = 600;
-
-            // Reducir el tiempo entre apariciones de objetos
-            intervaloCreacion = 50000000; // Se mantiene
-
-        } else if (puntos >= 7000) {
-            // Cambiar las probabilidades para mayor dificultad
-            probabilidadMoneda = 50;  // Monedas menos frecuentes (40%)
-            probabilidadTiburon = 40; // Tiburones más frecuentes (40%)
-            probabilidadEspada = 10;  // Espadas permanecen igual (20%)
-
-            // Aumentar la velocidad de caída
-            velocidadCaida = 500;
-
-            // Reducir el tiempo entre apariciones de objetos
-            intervaloCreacion = 50000000; // más rápido
-
-        } else if (puntos >= 500) {
-            // Ajustes intermedios (500 puntos)
-            probabilidadMoneda = 60;
-            probabilidadTiburon = 30;
-            probabilidadEspada = 10;
-
-            velocidadCaida = 400;
-            intervaloCreacion = 70000000; // 0.07 segundos
-        } else {
-            // Valores por defecto (menos de 500 puntos)
-            probabilidadMoneda = 70;
-            probabilidadTiburon = 20;
-            probabilidadEspada = 10;
-
-            velocidadCaida = 300;
-            intervaloCreacion = 80000000; // 0.08 segundos
-        }
+        // Las probabilidades y otros ajustes se mantienen como estaban
     }
-
 
     /**
      * Crea un nuevo objeto que cae en función de las probabilidades dinámicas de aparición.

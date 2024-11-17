@@ -53,6 +53,6 @@ public class Moneda extends ObjetoLluvia {
 
     @Override
     public void alColisionar(Pirate pirate) {
-        pirate.sumarPuntos(10);
+        GameManager.getInstance().addScore(20); // Agregar puntos al GameManager
     }
 }
