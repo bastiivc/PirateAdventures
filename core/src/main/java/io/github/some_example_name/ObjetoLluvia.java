@@ -20,7 +20,7 @@ public abstract class ObjetoLluvia implements Actualizable, Dibujable {
         this.textura = textura;
         this.estrategia = estrategia;
         area = new Rectangle();
-        area.width = 64;
+        area.width = 48;
         area.height = 64;
     }
 
@@ -42,6 +42,10 @@ public abstract class ObjetoLluvia implements Actualizable, Dibujable {
 
     protected Texture getTextura() {
         return textura;
+    }
+
+    public void setHitboxSize(float width, float height) {
+        area.setSize(width, height);
     }
 
     @Override

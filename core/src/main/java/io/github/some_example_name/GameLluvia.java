@@ -201,14 +201,14 @@ public class GameLluvia {
 
     public void reiniciarJuego() {
         // Reinicia los estados del pirata y la lluvia
-        pirate.reiniciar();
-        lluvia.reiniciar();
+        pirate.reiniciar(); // Restaura vidas y posición inicial del pirate
+        lluvia.reiniciar(); // Limpia y restablece los objetos de lluvia
 
         // Reinicia el fondo al estado inicial (día)
         background = dayBackground;
 
         // Reinicia la puntuación y otros estados globales del juego
-        GameManager.getInstance().addScore(-GameManager.getInstance().getScore()); // Reinicia puntuación a 0
+        GameManager.getInstance().reset(); // Reinicia puntuación y dificultad
 
         // Reinicia el estado de pausa
         juegoPausado = false;
