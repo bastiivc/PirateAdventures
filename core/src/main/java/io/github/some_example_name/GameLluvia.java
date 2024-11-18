@@ -14,12 +14,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-
 /**
- * La clase GameLluvia es el núcleo del juego, encargada de inicializar y gestionar los elementos principales
- * como la cámara, el tarro, la lluvia, los fondos y las interacciones del juego.
+ * La clase {@code GameLluvia} es el núcleo del juego, encargada de inicializar y gestionar
+ * los elementos principales como la cámara, el pirata, la lluvia de objetos, los fondos,
+ * el estado del juego y las interacciones.
+ *
+ * <p>Características principales:</p>
+ * <ul>
+ *   <li>Gestiona la inicialización de los recursos del juego, como texturas, sonidos y fuentes.</li>
+ *   <li>Controla el ciclo de vida de los objetos del juego, incluyendo su renderizado y actualización.</li>
+ *   <li>Maneja el sistema de pausa y reinicio del juego.</li>
+ *   <li>Interacciona con {@link GameManager} para coordinar la lógica del juego.</li>
+ * </ul>
  */
-
 public class GameLluvia {
     private OrthographicCamera camera;
     private SpriteBatch batch;
@@ -31,76 +38,69 @@ public class GameLluvia {
     private Texture nightBackground;
     private Texture buttonTexture;
 
-    private BitmapFont font; // Fuente para puntos y vidas
+    private BitmapFont font; // Fuente para mostrar puntos y vidas
 
     private Stage stage;
     private boolean juegoPausado = false;
     private ImageButton botonReiniciar;
 
     /**
-     * Constructor de la clase GameLluvia. Inicializa fondos, cámara, batch, fuente, tarro, lluvia y el botón de reinicio.
+     * Constructor de la clase {@code GameLluvia}.
+     * <p>Inicializa los fondos, cámara, fuente, sprites, sonidos y otros elementos del juego.
+     * También configura el sistema de pausa y reinicio.</p>
      */
-
     public GameLluvia() {
-        // Inicializar fondos
+        // Inicialización de fondos
         dayBackground = new Texture(Gdx.files.internal("DayBackground1.jpg"));
         nightBackground = new Texture(Gdx.files.internal("NightBackground.png"));
         background = dayBackground;
 
-        // Inicializar cámara y batch
+        // Configuración de cámara y batch
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 480);
         batch = new SpriteBatch();
 
-        // Inicializar fuente
+        // Inicialización de la fuente
         font = new BitmapFont();
 
-        // Crear Tarro y Lluvia
+        // Configuración de pirata y lluvia
         Sound hurtSound = Gdx.audio.newSound(Gdx.files.internal("01._damage_grunt_male.wav"));
         pirate = new Pirate(new Texture(Gdx.files.internal("pirataSpriteA1OpenG.png")), hurtSound);
 
         Sound dropSound = Gdx.audio.newSound(Gdx.files.internal("Coins4.mp3"));
         Music rainMusic = Gdx.audio.newMusic(Gdx.files.internal("pirate.mp3"));
         lluvia = new Lluvia(
-        	    new Texture(Gdx.files.internal("moneda_pirata.png")),
-        	    new Texture(Gdx.files.internal("Shark1.png")),
-        	    new Texture(Gdx.files.internal("sword.png")),
-        	    dropSound,
-        	    rainMusic
-        	);
-
+            new Texture(Gdx.files.internal("moneda_pirata.png")),
+            new Texture(Gdx.files.internal("Shark1.png")),
+            new Texture(Gdx.files.internal("sword.png")),
+            dropSound,
+            rainMusic
+        );
 
         pirate.crear();
         lluvia.crear();
 
-        // Inicializar Stage
+        // Configuración del Stage
         stage = new Stage(new ScreenViewport());
         Gdx.input.setInputProcessor(stage);
 
-        // Crear botón de reinicio
+        // Configuración del botón de reinicio
         buttonTexture = new Texture(Gdx.files.internal("button.png"));
         crearBotonReiniciar();
 
-        // Establecer el pirata en el GameManager
+        // Registro del pirata en el GameManager
         GameManager.getInstance().setPirate(pirate);
     }
 
     /**
-     * Crea el botón de reiniciar y lo añade al stage.
+     * Crea el botón de reinicio del juego y lo añade al {@link Stage}.
      */
-
     private void crearBotonReiniciar() {
-        // Crear drawable para el botón
         TextureRegionDrawable drawable = new TextureRegionDrawable(buttonTexture);
-
-        // Crear ImageButton con el drawable
         botonReiniciar = new ImageButton(drawable);
         botonReiniciar.setSize(125, 62);
-
-        // Configurar posición inicial del botón
         actualizarPosicionBotonReiniciar();
 
-        // Añadir listener para reiniciar el juego
         botonReiniciar.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -108,12 +108,13 @@ public class GameLluvia {
             }
         });
 
-        // Añadir el botón al Stage
         stage.addActor(botonReiniciar);
         botonReiniciar.setVisible(false);
     }
 
-    // Método para actualizar la posición del botón dinámicamente
+    /**
+     * Actualiza dinámicamente la posición del botón de reinicio en el centro de la pantalla.
+     */
     private void actualizarPosicionBotonReiniciar() {
         botonReiniciar.setPosition(
             (stage.getViewport().getWorldWidth() - botonReiniciar.getWidth()) / 2,
@@ -122,35 +123,28 @@ public class GameLluvia {
     }
 
     /**
-     * Ajusta el tamaño del viewport y reposiciona el botón de reinicio al cambiar el tamaño de la ventana.
+     * Ajusta el tamaño del {@link Stage} y reposiciona el botón al cambiar el tamaño de la ventana.
      *
      * @param width  El nuevo ancho de la ventana.
      * @param height El nuevo alto de la ventana.
      */
-
     public void resize(int width, int height) {
         stage.getViewport().update(width, height, true);
         actualizarPosicionBotonReiniciar();
     }
 
     /**
-     * Actualiza el fondo del juego dependiendo de la puntuación del tarro.
+     * Actualiza el fondo del juego según la puntuación del jugador.
+     * Cambia entre los fondos de día y noche.
      */
-
     public void actualizarFondo() {
         GameManager gameManager = GameManager.getInstance();
-        if (gameManager.isNight()) {
-            background = nightBackground;
-        } else {
-            background = dayBackground;
-        }
+        background = gameManager.isNight() ? nightBackground : dayBackground;
     }
 
-
     /**
-     * Renderiza el juego, dibujando los elementos en pantalla y gestionando el estado de pausa.
+     * Renderiza los elementos del juego en pantalla, gestionando el estado de pausa.
      */
-
     public void render() {
         if (pirate.getVidas() <= 0 && !juegoPausado) {
             pausarJuego();
@@ -174,11 +168,9 @@ public class GameLluvia {
         }
     }
 
-
     /**
      * Actualiza el movimiento de los elementos del juego si este no está pausado.
      */
-
     public void actualizarMovimiento() {
         if (!juegoPausado) {
             pirate.actualizarMovimiento();
@@ -189,38 +181,26 @@ public class GameLluvia {
     /**
      * Pausa el juego y muestra el botón de reinicio.
      */
-
     public void pausarJuego() {
         juegoPausado = true;
         botonReiniciar.setVisible(true);
     }
 
     /**
-     * Reinicia el juego a su estado inicial.
+     * Reinicia el juego restaurando el estado inicial de los elementos y puntuaciones.
      */
-
     public void reiniciarJuego() {
-        // Reinicia los estados del pirata y la lluvia
-        pirate.reiniciar(); // Restaura vidas y posición inicial del pirate
-        lluvia.reiniciar(); // Limpia y restablece los objetos de lluvia
-
-        // Reinicia el fondo al estado inicial (día)
+        pirate.reiniciar();
+        lluvia.reiniciar();
         background = dayBackground;
-
-        // Reinicia la puntuación y otros estados globales del juego
-        GameManager.getInstance().reset(); // Reinicia puntuación y dificultad
-
-        // Reinicia el estado de pausa
+        GameManager.getInstance().reset();
         juegoPausado = false;
-
-        // Oculta el botón de reinicio
         botonReiniciar.setVisible(false);
     }
 
     /**
-     * Libera los recursos utilizados por el juego.
+     * Libera todos los recursos utilizados por el juego, incluyendo texturas, sonidos y fuentes.
      */
-
     public void dispose() {
         dayBackground.dispose();
         nightBackground.dispose();
@@ -231,13 +211,11 @@ public class GameLluvia {
         batch.dispose();
     }
 
-
     /**
-     * Obtiene el Stage del juego.
+     * Obtiene el {@link Stage} utilizado por el juego para gestionar las interacciones.
      *
-     * @return El Stage utilizado en el juego.
+     * @return El {@link Stage} del juego.
      */
-
     public Stage getStage() {
         return stage;
     }

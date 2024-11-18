@@ -9,24 +9,23 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 /**
- * Clase principal del juego que extiende ApplicationAdapter.
- * Esta clase maneja la configuración inicial y el ciclo de vida del juego.
- * Configura la cámara y el viewport para mantener dimensiones fijas
- * del mundo virtual independientemente del tamaño de la ventana.
+ * Clase principal del juego que extiende {@link ApplicationAdapter}.
+ * Esta clase gestiona la configuración inicial y el ciclo de vida del juego, incluyendo la creación de la cámara
+ * y el viewport, y asegura que el mundo virtual mantenga dimensiones fijas independientemente del tamaño de la ventana.
  */
 public class MyGame extends ApplicationAdapter {
     private OrthographicCamera camera;
     private Viewport viewport;
     private SpriteBatch batch;
 
-    /** Ancho del mundo virtual */
+    /** Ancho del mundo virtual en unidades. */
     public static final float WORLD_WIDTH = 800;
-    /** Alto del mundo virtual */
+    /** Alto del mundo virtual en unidades. */
     public static final float WORLD_HEIGHT = 600;
 
     /**
      * Método llamado al iniciar el juego.
-     * Inicializa la cámara, el viewport y el SpriteBatch.
+     * Configura la cámara ortográfica, el viewport y el {@link SpriteBatch} para la renderización.
      */
     @Override
     public void create() {
@@ -40,8 +39,8 @@ public class MyGame extends ApplicationAdapter {
     }
 
     /**
-     * Método llamado en cada cuadro de renderización.
-     * Actualiza la cámara y dibuja los objetos del juego.
+     * Método llamado en cada frame del juego.
+     * Actualiza la cámara y renderiza los objetos en la pantalla.
      */
     @Override
     public void render() {
@@ -59,10 +58,10 @@ public class MyGame extends ApplicationAdapter {
 
     /**
      * Método llamado cuando la ventana es redimensionada.
-     * Actualiza el viewport para ajustarse al nuevo tamaño.
+     * Ajusta el viewport para reflejar las nuevas dimensiones de la ventana y mantener las proporciones del mundo virtual.
      *
-     * @param width  Nuevo ancho de la ventana
-     * @param height Nuevo alto de la ventana
+     * @param width  Nuevo ancho de la ventana en píxeles.
+     * @param height Nuevo alto de la ventana en píxeles.
      */
     @Override
     public void resize(int width, int height) {
