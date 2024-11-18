@@ -249,6 +249,5 @@ public class Pirate implements Destruible, Dibujable{
 
     public void addLives(int lives) {
         vidas += lives;
-        System.out.println("¡Has ganado " + lives + " vida(s)! Vidas actuales: " + vidas);
     }
 }
