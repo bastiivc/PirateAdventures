@@ -212,4 +212,11 @@ public class Pirate implements Destruible, Dibujable {
     public void addLives(int lives) {
         vidas += lives;
     }
+
+    public int getPuntos(){
+        return puntos;
+    }
+    public void setPuntos(int puntos){
+        this.puntos = puntos;
+    }
 }
